@@ -6,5 +6,10 @@
              tools:context=".MainActivity"
              tools:ignore="MergeRootFrame">
 
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/myBeers"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" >
+    </ListView>
 
 </FrameLayout>
