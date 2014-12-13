@@ -10,9 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity {
+    private static final String TAG = MainActivity.class.getCanonicalName();
+    private AdvancedListViewAdapter adapter;
+    private ArrayList<BeerData> listData;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +31,23 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        Button addButton = (Button) findViewById(R.id.add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setListItems(listData);
+            }
+        });
+
+        Button removeButton = (Button) findViewById(R.id.clear_button);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.clear();
+            }
+        });
+
     }
 
 
