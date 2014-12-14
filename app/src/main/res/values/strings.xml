@@ -14,5 +14,6 @@
     <string name="hint_pub_name">Pub Name</string>
     <string name="title_activity_beer_list">BeerListActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="add_another">Add Another</string>
 
 </resources>

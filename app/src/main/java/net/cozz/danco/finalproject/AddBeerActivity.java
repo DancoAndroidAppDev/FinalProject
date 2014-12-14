@@ -57,40 +57,6 @@ public class AddBeerActivity extends Activity {
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
-    private void doSaveBeer(final String beerName, final String desc, final String pubName) {
-        BeerDataSource dataSource = new BeerDataSource(this);
-        try {
-            dataSource.open();
-            int i = 0;
-            BeerData beer = new BeerData(beerName);
-            beer.setImageFileUri(fileUri.toString());
-            beer.setDescription(desc);
-            beer.setPubName(pubName);
-
-            ExifInterface exif = new ExifInterface(fileUri.toString());
-            if (isLocationAvailable(exif)) {
-                Location location = new Location("");
-                location.setLatitude(Double.parseDouble(
-                        exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)));
-                location.setLongitude(Double.parseDouble(
-                        exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)));
-                beer.setLocation(location);
-            }
-
-            Intent intent = new Intent(getApplicationContext(), BeerListActivity.class);
-            startActivity(intent);
-        } catch (SQLException | IOException e) {
-            Log.d(TAG, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isLocationAvailable(ExifInterface exif) {
-        return exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE) != null &&
-                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE) != null;
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -114,14 +80,14 @@ public class AddBeerActivity extends Activity {
             description = (EditText) findViewById(R.id.edit_txt_description);
             pubName = (EditText) findViewById(R.id.edit_txt_pub_name);
 
-            final String strBeerName = beerName.getText().toString();
-            final String strDescription = description.getText().toString();
-            final String strPubName = pubName.getText().toString();
-
             Button btnOk = (Button) findViewById(R.id.btnOk);
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String strBeerName = beerName.getText().toString();
+                    String strDescription = description.getText().toString();
+                    String strPubName = pubName.getText().toString();
+
                     doSaveBeer(strBeerName, strDescription, strPubName);
                 }
             });
@@ -146,6 +112,44 @@ public class AddBeerActivity extends Activity {
                 // Video capture failed, advise user
             }
         }
+    }
+
+
+    private void doSaveBeer(final String beerName, final String desc, final String pubName) {
+        BeerDataSource datasource = new BeerDataSource(this);
+        try {
+            datasource.open();
+            int i = 0;
+            BeerData beer = new BeerData(beerName);
+            beer.setImageFileUri(fileUri.toString());
+            beer.setDescription(desc);
+            beer.setPubName(pubName);
+
+            ExifInterface exif = new ExifInterface(fileUri.toString());
+            if (isLocationAvailable(exif)) {
+                Location location = new Location("");
+                location.setLatitude(Double.parseDouble(
+                        exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)));
+                location.setLongitude(Double.parseDouble(
+                        exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)));
+                beer.setLocation(location);
+            }
+            datasource.addBeerData(beer);
+
+            Intent intent = new Intent(getApplicationContext(), BeerListActivity.class);
+            startActivity(intent);
+        } catch (SQLException | IOException e) {
+            Log.d(TAG, e.getMessage());
+            e.printStackTrace();
+        } finally {
+            datasource.close();
+        }
+    }
+
+
+    private boolean isLocationAvailable(ExifInterface exif) {
+        return exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE) != null &&
+                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE) != null;
     }
 
 

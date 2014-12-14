@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingStart="8dp"
@@ -9,27 +9,31 @@
     android:layout_height="48dp">
 
     <ImageView
-        android:id="@+id/beers_i_drank"
+        android:id="@+id/my_beers"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true" />
+        android:layout_height="fill_parent"
+        android:layout_marginEnd="4dp"
+        />
 
     <TextView
         android:id="@+id/name"
-        android:gravity="center_vertical"
+        android:gravity="top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/my_beers"/>
 
     <TextView
         android:id="@+id/description"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/name"/>
 
     <TextView
         android:id="@+id/pub"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/description"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -16,7 +16,8 @@ public class BeerDataSource {
 
     private SQLiteDatabase database;
     private DBHandler dbHelper;
-    private String[] columns = {DBHandler.KEY_ID,
+    private String[] columns = {
+            DBHandler.KEY_ID,
             DBHandler.KEY_BEER_NAME,
             DBHandler.KEY_FILE_URI,
             DBHandler.KEY_DESCRIPTION,
@@ -36,6 +37,15 @@ public class BeerDataSource {
 
     public void close() {
         dbHelper.close();
+    }
+
+
+    public BeerData addBeerData(BeerData beer) {
+        return addBeerData(beer.getName(),
+                beer.getImageFileUri(),
+                beer.getDescription(),
+                beer.getPubName(),
+                beer.getLocation() == null ? "" : beer.getLocation().toString());
     }
 
 

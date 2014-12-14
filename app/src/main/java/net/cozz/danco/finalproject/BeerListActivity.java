@@ -1,9 +1,12 @@
 package net.cozz.danco.finalproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -19,6 +22,15 @@ public class BeerListActivity extends Activity {
         adapter = new AdvancedListViewAdapter(this);
         ListView listView = (ListView) findViewById(R.id.list_view_beers);
         listView.setAdapter(adapter);
+
+        Button btnAddAnother = (Button) findViewById(R.id.add_another);
+        btnAddAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddBeerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -37,8 +49,9 @@ public class BeerListActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.add_another) {
+            Intent intent = new Intent(getApplicationContext(), AddBeerActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

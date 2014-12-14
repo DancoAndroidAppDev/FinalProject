@@ -8,11 +8,11 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 /**
  */
 public class BeerData {
-    private final int NAME_COLUMN_INDEX = 0;
-    private final int IMAGE_FILE_URI = 1;
-    private final int DESCRIPTION_COLUMN_INDEX = 2;
-    private final int PUB_COLUMN_INDEX = 3;
-    private final int LOCATION_COLUMN_INDEX = 4;
+    private final int NAME_COLUMN_INDEX = 1;
+    private final int IMAGE_FILE_URI = 2;
+    private final int DESCRIPTION_COLUMN_INDEX = 3;
+    private final int PUB_COLUMN_INDEX = 4;
+    private final int LOCATION_COLUMN_INDEX = 5;
 
     /*
     The name of the beer
