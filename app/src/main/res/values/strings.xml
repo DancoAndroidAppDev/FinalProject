@@ -4,7 +4,13 @@
     <string name="app_name">BeerTracker</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="show_beers">Beer List</string>
     <string name="add_beer">Add Beer</string>
-    <string name="show_my_beers">Beer List</string>
+    <string name="title_activity_add_beer">AddBeerActivity</string>
+    <string name="btn_ok_text">OK</string>
+    <string name="btn_cancel_text">Cancel</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_beer_name">Beer name</string>
+    <string name="hint_pub_name">Pub Name</string>
 
 </resources>

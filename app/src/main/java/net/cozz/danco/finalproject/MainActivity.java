@@ -1,15 +1,15 @@
 package net.cozz.danco.finalproject;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 
 import java.util.ArrayList;
@@ -21,18 +21,14 @@ public class MainActivity extends Activity {
     private ArrayList<BeerData> listData;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
 
-        Button addButton = (Button) findViewById(R.id.add_button);
+        adapter = new AdvancedListViewAdapter(this);
+
+        Button addButton = (Button) findViewById(R.id.show_beers);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,14 +36,19 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button removeButton = (Button) findViewById(R.id.clear_button);
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        Button addBeer = (Button) findViewById(R.id.add_beer_button);
+        addBeer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.clear();
+                doAddBeer();
             }
         });
+    }
 
+
+    private void doAddBeer() {
+        Intent intent = new Intent(getApplicationContext(), AddBeerActivity.class);
+        startActivity(intent);
     }
 
 
