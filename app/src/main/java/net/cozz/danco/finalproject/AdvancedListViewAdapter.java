@@ -1,20 +1,24 @@
 package net.cozz.danco.finalproject;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  */
 public class AdvancedListViewAdapter extends BaseAdapter {
     private final static String TAG = AdvancedListViewAdapter.class.getCanonicalName();
-    private ArrayList<BeerData> content;
+    private List<BeerData> content;
     private Context context;
     private AdvancedListViewAdapter adapter;
 
@@ -24,7 +28,18 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         Log.i(TAG, "AdvancedListViewAdapter - constructor...");
 
         this.context = context;
-        this.content = new ArrayList<BeerData>();
+
+        BeerDataSource datasource = new BeerDataSource(context);
+        try {
+            datasource.open();
+            content = datasource.getBeerDataList();
+            Log.d("", content.toString());
+        } catch (SQLException e) {
+            Log.d("MyActivity", "unable to open datasource");
+        } finally {
+            datasource.close();
+        }
+
     }
 
     public void setListItems(ArrayList<BeerData> newList) {
@@ -84,7 +99,10 @@ public class AdvancedListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.beer_list_item, parent, false);
 
             viewHolder = new ViewHolder();
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.beers_i_drank);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.description = (TextView) convertView.findViewById(R.id.description);
+            viewHolder.pub = (TextView) convertView.findViewById(R.id.pub);
             convertView.setTag(viewHolder);
 
             convertView.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +114,11 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
         }
 
+        ((ViewHolder) convertView.getTag()).image.setImageURI(
+                Uri.parse(getItem(position).getImageFileUri()));
         ((ViewHolder) convertView.getTag()).name.setText(getItem(position).getName());
+        ((ViewHolder) convertView.getTag()).description.setText(getItem(position).getDescription());
+        ((ViewHolder) convertView.getTag()).pub.setText(getItem(position).getPubName());
 
         return convertView;
 
@@ -104,6 +126,9 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
     static class ViewHolder {
         //SmartImageView image;
+        ImageView image;
         TextView name;
+        TextView description;
+        TextView pub;
     }
 }

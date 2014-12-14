@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +37,11 @@ public class AddBeerActivity extends Activity {
 
     private Uri fileUri;
 
+    private EditText beerName;
+    private EditText description;
+    private EditText pubName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,46 +55,39 @@ public class AddBeerActivity extends Activity {
 
         // start the image capture Intent
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
-        final ImageView image = (ImageView)findViewById(R.id.beer_to_add);
-        image.setImageURI(fileUri);
-        // I'd like to add an on click here that will bring up the location where the photo was
-        // taken in a map view, but again, I'm out of time to finish that part
-
-        final EditText beerName = (EditText) findViewById(R.id.txtBeerName);
-        final EditText description = (EditText) findViewById(R.id.txtDescription);
-        final EditText pubName = (EditText) findViewById(R.id.txtPubName);
-
-        Button btnOk = (Button) findViewById(R.id.btnOk);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doSaveBeer(beerName.getText(), description.getText(), pubName.getText());
-            }
-        });
     }
 
-    private void doSaveBeer(Editable beerName, Editable desc, Editable pubName) {
+    private void doSaveBeer(final String beerName, final String desc, final String pubName) {
         BeerDataSource dataSource = new BeerDataSource(this);
         try {
             dataSource.open();
             int i = 0;
-            BeerData beer = new BeerData(beerName.toString());
+            BeerData beer = new BeerData(beerName);
             beer.setImageFileUri(fileUri.toString());
-            beer.setDescription(desc.toString());
-            beer.setPubName(pubName.toString());
+            beer.setDescription(desc);
+            beer.setPubName(pubName);
 
             ExifInterface exif = new ExifInterface(fileUri.toString());
-            Location location = new Location("");
-            location.setLatitude(Double.parseDouble(
-                    exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)));
-            location.setLongitude(Double.parseDouble(
-                    exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)));
-            beer.setLocation(location);
+            if (isLocationAvailable(exif)) {
+                Location location = new Location("");
+                location.setLatitude(Double.parseDouble(
+                        exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)));
+                location.setLongitude(Double.parseDouble(
+                        exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)));
+                beer.setLocation(location);
+            }
+
+            Intent intent = new Intent(getApplicationContext(), BeerListActivity.class);
+            startActivity(intent);
         } catch (SQLException | IOException e) {
             Log.d(TAG, e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private boolean isLocationAvailable(ExifInterface exif) {
+        return exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE) != null &&
+                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE) != null;
     }
 
 
@@ -100,13 +97,42 @@ public class AddBeerActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
                 Toast.makeText(this, "Image saved to:\n" +
-                        data.getData(), Toast.LENGTH_LONG).show();
+                        fileUri, Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
             } else {
                 // Image capture failed, advise user
                 Toast.makeText(this, "Dude, something went wrong", Toast.LENGTH_LONG).show();
             }
+
+            ImageView image = (ImageView)findViewById(R.id.beer_to_add);
+            image.setImageURI(fileUri);
+            // I'd like to add an on click here that will bring up the location where the photo was
+            // taken in a map view, but again, I'm out of time to finish that part
+
+            beerName = (EditText) findViewById(R.id.edit_txt_beer_name);
+            description = (EditText) findViewById(R.id.edit_txt_description);
+            pubName = (EditText) findViewById(R.id.edit_txt_pub_name);
+
+            final String strBeerName = beerName.getText().toString();
+            final String strDescription = description.getText().toString();
+            final String strPubName = pubName.getText().toString();
+
+            Button btnOk = (Button) findViewById(R.id.btnOk);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doSaveBeer(strBeerName, strDescription, strPubName);
+                }
+            });
+
+            Button btnCancel = (Button) findViewById(R.id.btnCancel);
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
 
         if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {

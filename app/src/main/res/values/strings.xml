@@ -12,5 +12,7 @@
     <string name="hint_description">Description</string>
     <string name="hint_beer_name">Beer name</string>
     <string name="hint_pub_name">Pub Name</string>
+    <string name="title_activity_beer_list">BeerListActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

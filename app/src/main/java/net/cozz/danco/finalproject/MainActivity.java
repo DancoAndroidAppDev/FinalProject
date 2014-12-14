@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getCanonicalName();
-    private AdvancedListViewAdapter adapter;
     private ArrayList<BeerData> listData;
 
 
@@ -26,13 +25,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new AdvancedListViewAdapter(this);
 
-        Button addButton = (Button) findViewById(R.id.show_beers);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        Button showBeers = (Button) findViewById(R.id.show_beers);
+        showBeers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.setListItems(listData);
+                Intent intent = new Intent(getApplicationContext(), BeerListActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -28,10 +28,10 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_BEER_DETAILS + " (" +
                 KEY_ID + " INTEGER PRIMARY KEY, " +
                 KEY_BEER_NAME + " TEXT, " +
-                KEY_FILE_URI + " TEXT)," +
+                KEY_FILE_URI + " TEXT, " +
                 KEY_DESCRIPTION + " TEXT, " +
                 KEY_PUB_NAME + " TEXT, " +
-                KEY_LOCATION + " TEXT");
+                KEY_LOCATION + " TEXT)");
     }
 
     @Override
