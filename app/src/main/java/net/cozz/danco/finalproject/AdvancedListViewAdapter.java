@@ -114,11 +114,13 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
         }
 
-        ((ViewHolder) convertView.getTag()).image.setImageURI(
+        viewHolder = (ViewHolder) convertView.getTag();
+
+        viewHolder.image.setImageURI(
                 Uri.parse(getItem(position).getImageFileUri()));
-        ((ViewHolder) convertView.getTag()).name.setText(getItem(position).getName());
-        ((ViewHolder) convertView.getTag()).description.setText(getItem(position).getDescription());
-        ((ViewHolder) convertView.getTag()).pub.setText(getItem(position).getPubName());
+        viewHolder.name.setText(getItem(position).getName());
+        viewHolder.description.setText(getItem(position).getDescription());
+        viewHolder.pub.setText(getItem(position).getPubName());
 
         return convertView;
 

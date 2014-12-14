@@ -26,7 +26,8 @@
         <ImageView
             android:id="@+id/beer_to_add"
             android:layout_width="100dp"
-            android:layout_height="300dp"
+            android:layout_height="100dp"
+            android:layout_gravity="top"
             />
 
         <LinearLayout
