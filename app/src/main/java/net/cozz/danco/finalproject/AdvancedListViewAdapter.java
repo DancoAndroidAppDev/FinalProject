@@ -99,7 +99,7 @@ public class AdvancedListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.beer_list_item, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.image = (ImageView) convertView.findViewById(R.id.my_beers);
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.beer_image);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.pub = (TextView) convertView.findViewById(R.id.pub);
