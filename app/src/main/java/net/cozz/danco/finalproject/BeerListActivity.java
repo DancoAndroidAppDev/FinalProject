@@ -19,6 +19,8 @@ public class BeerListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beer_list);
 
+        setTitle("My Beers");
+
         adapter = new AdvancedListViewAdapter(this);
         ListView listView = (ListView) findViewById(R.id.list_view_beers);
         listView.setAdapter(adapter);
