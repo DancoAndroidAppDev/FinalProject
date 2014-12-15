@@ -1,6 +1,10 @@
 package net.cozz.danco.finalproject;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +27,7 @@ public class AdvancedListViewAdapter extends BaseAdapter {
     private AdvancedListViewAdapter adapter;
 
 
-    public AdvancedListViewAdapter(Context context){//}, ArrayList<State> content) {
+    public AdvancedListViewAdapter(Context context) {//}, ArrayList<State> content) {
         super();
         Log.i(TAG, "AdvancedListViewAdapter - constructor...");
 
@@ -42,6 +46,7 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
     }
 
+
     public void setListItems(ArrayList<BeerData> newList) {
         Log.d(TAG, "setListItems");
 
@@ -49,19 +54,22 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addItem(BeerData stateObj){
+
+    public void addItem(BeerData stateObj) {
         Log.d(TAG, "addItem");
 
         content.add(stateObj);
         notifyDataSetChanged();
     }
 
-    public void removeItem(BeerData stateObj){
+
+    public void removeItem(BeerData stateObj) {
         Log.d(TAG, "addItem");
 
         content.remove(stateObj);
         notifyDataSetChanged();
     }
+
 
     public void clear() {
         Log.d(TAG, "clear");
@@ -70,26 +78,30 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+
     @Override
     public int getCount() {
         return content.size();
     }
+
 
     @Override
     public BeerData getItem(int position) {
         return content.get(position);
     }
 
+
     @Override
     public long getItemId(int position) {
-        return content.indexOf( content.get(position) );
+        return content.indexOf(content.get(position));
     }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
-        if (convertView == null){ //the first time around, the view is null, so inflate it
+        if (convertView == null) { //the first time around, the view is null, so inflate it
 
             //inflate using the system inflater. This returns a reference to the inflater,
             // which inflates the resource XML to the corresponding view
@@ -116,8 +128,8 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
         viewHolder = (ViewHolder) convertView.getTag();
 
-        viewHolder.image.setImageURI(
-                Uri.parse(getItem(position).getImageFileUri()));
+        viewHolder.image.setImageBitmap(
+                getScaledImage(getItem(position).getImageFileUri(), 100, 100));
         viewHolder.name.setText(getItem(position).getName());
         viewHolder.description.setText(getItem(position).getDescription());
         viewHolder.pub.setText(getItem(position).getPubName());
@@ -125,6 +137,67 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         return convertView;
 
     }
+
+
+    private Bitmap getScaledImage(final String fileUri, float newWidth, float newHeight) {
+        Bitmap bitmapToScale = BitmapFactory.decodeFile(fileUri);
+        if (bitmapToScale == null)
+            return null;
+        //get the original width and height
+        int width = bitmapToScale.getWidth();
+        int height = bitmapToScale.getHeight();
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+
+        // resize the bit map
+        matrix.postScale(newWidth / width, newHeight / height);
+
+        // recreate the new Bitmap and set it back
+        return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(),
+                bitmapToScale.getHeight(), matrix, true);
+    }
+
+
+    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+
+    private int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
 
     static class ViewHolder {
         //SmartImageView image;
