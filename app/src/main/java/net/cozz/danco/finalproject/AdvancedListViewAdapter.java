@@ -14,6 +14,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +131,8 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         viewHolder = (ViewHolder) convertView.getTag();
 
         viewHolder.image.setImageBitmap(getScaledImage(getItem(position).getImageFileUri(),
-                        viewHolder.image.getWidth(), viewHolder.image.getHeight()));
+                        viewHolder.image.getLayoutParams().width,
+                        viewHolder.image.getLayoutParams().height));
         viewHolder.name.setText(getItem(position).getName());
         viewHolder.description.setText(getItem(position).getDescription());
         viewHolder.pub.setText(getItem(position).getPubName());
@@ -139,22 +142,19 @@ public class AdvancedListViewAdapter extends BaseAdapter {
     }
 
 
-    private Bitmap getScaledImage(final String fileUri, float newWidth, float newHeight) {
-        Bitmap bitmapToScale = BitmapFactory.decodeFile(fileUri);
-        if (bitmapToScale == null)
+    private Bitmap getScaledImage(final String fileUri, int newWidth, int newHeight) {
+        Uri uri = Uri.parse(fileUri);
+
+        Bitmap bitmapToScale = null;
+        try {
+            bitmapToScale =
+                    BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage());
             return null;
-        //get the original width and height
-        int width = bitmapToScale.getWidth();
-        int height = bitmapToScale.getHeight();
-        // create a matrix for the manipulation
-        Matrix matrix = new Matrix();
+        }
 
-        // resize the bit map
-        matrix.postScale(newWidth / width, newHeight / height);
-
-        // recreate the new Bitmap and set it back
-        Bitmap bm = Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(),
-                bitmapToScale.getHeight(), matrix, true);
+        Bitmap bm = Bitmap.createScaledBitmap(bitmapToScale, newWidth, newHeight, false);
         return bm;
     }
 
