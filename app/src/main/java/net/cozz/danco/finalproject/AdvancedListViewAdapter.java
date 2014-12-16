@@ -128,8 +128,8 @@ public class AdvancedListViewAdapter extends BaseAdapter {
 
         viewHolder = (ViewHolder) convertView.getTag();
 
-        viewHolder.image.setImageBitmap(
-                getScaledImage(getItem(position).getImageFileUri(), 100, 100));
+        viewHolder.image.setImageBitmap(getScaledImage(getItem(position).getImageFileUri(),
+                        viewHolder.image.getWidth(), viewHolder.image.getHeight()));
         viewHolder.name.setText(getItem(position).getName());
         viewHolder.description.setText(getItem(position).getDescription());
         viewHolder.pub.setText(getItem(position).getPubName());
@@ -153,8 +153,9 @@ public class AdvancedListViewAdapter extends BaseAdapter {
         matrix.postScale(newWidth / width, newHeight / height);
 
         // recreate the new Bitmap and set it back
-        return Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(),
+        Bitmap bm = Bitmap.createBitmap(bitmapToScale, 0, 0, bitmapToScale.getWidth(),
                 bitmapToScale.getHeight(), matrix, true);
+        return bm;
     }
 
 
