@@ -1,10 +1,9 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.cozz.danco.finalproject.providers.BeerData;
+import net.cozz.danco.finalproject.providers.BeerDataSource;
+import net.cozz.danco.finalproject.R;
+
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +144,16 @@ public class AdvancedListViewAdapter extends BaseAdapter {
     }
 
 
-    private Bitmap getScaledImage(final String fileUri, int newWidth, int newHeight) {
+    /**
+     * Need to use ContentResolver to resolve the image from the Uri
+     *
+     * TODO -- should probably store the scaled image and use stored image to save work
+     * @param fileUri - Uri to image
+     * @param targetWidth - target width
+     * @param targetHeight - target height
+     * @return - scaled bitmap
+     */
+    private Bitmap getScaledImage(final String fileUri, int targetWidth, int targetHeight) {
         Uri uri = Uri.parse(fileUri);
 
         Bitmap bitmapToScale = null;
@@ -154,11 +165,19 @@ public class AdvancedListViewAdapter extends BaseAdapter {
             return null;
         }
 
-        Bitmap bm = Bitmap.createScaledBitmap(bitmapToScale, newWidth, newHeight, false);
+        Bitmap bm = Bitmap.createScaledBitmap(bitmapToScale, targetWidth, targetHeight, false);
         return bm;
     }
 
 
+    /**
+     *
+     * @param res
+     * @param resId
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
     private Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 
@@ -176,6 +195,12 @@ public class AdvancedListViewAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
     private int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image

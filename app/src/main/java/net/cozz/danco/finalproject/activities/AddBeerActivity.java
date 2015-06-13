@@ -1,6 +1,5 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.media.ExifInterface;
@@ -8,6 +7,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import net.cozz.danco.finalproject.providers.BeerData;
+import net.cozz.danco.finalproject.providers.BeerDataSource;
+import net.cozz.danco.finalproject.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +32,7 @@ import java.util.Date;
     I started with trying to access the Camera object, then the camera2 API and finally settled on
     the Intent method since it was simpler.
  */
-public class AddBeerActivity extends Activity {
+public class AddBeerActivity extends AppCompatActivity {
     private static final String TAG = AddBeerActivity.class.getCanonicalName();
     private static final int MEDIA_TYPE_IMAGE = 1;
     private static final int MEDIA_TYPE_VIDEO = 2;
@@ -46,6 +51,8 @@ public class AddBeerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_beer);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
 
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

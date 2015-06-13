@@ -1,10 +1,10 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.activities;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import net.cozz.danco.finalproject.providers.BeerData;
+import net.cozz.danco.finalproject.R;
+
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
     private ArrayList<BeerData> listData;
 
@@ -25,6 +28,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
 
         Button showBeers = (Button) findViewById(R.id.show_beers);
         showBeers.setOnClickListener(new View.OnClickListener() {

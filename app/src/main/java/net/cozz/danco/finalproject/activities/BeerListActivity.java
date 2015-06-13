@@ -1,16 +1,21 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.activities;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import net.cozz.danco.finalproject.adapters.AdvancedListViewAdapter;
+import net.cozz.danco.finalproject.R;
 
-public class BeerListActivity extends Activity {
+
+public class BeerListActivity extends AppCompatActivity {
 
     private AdvancedListViewAdapter adapter;
 
@@ -18,6 +23,8 @@ public class BeerListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beer_list);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolBar));
 
         setTitle("My Beers");
 
@@ -33,6 +40,11 @@ public class BeerListActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.providers;
 
 import android.database.Cursor;
 import android.location.Location;

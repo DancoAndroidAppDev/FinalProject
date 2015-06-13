@@ -1,4 +1,4 @@
-package net.cozz.danco.finalproject;
+package net.cozz.danco.finalproject.providers;
 
 import android.content.ContentValues;
 import android.content.Context;
